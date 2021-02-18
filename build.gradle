@@ -1,0 +1,97 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.4.30'
+    id 'maven-publish'
+    id 'signing'
+    id 'org.jetbrains.dokka' version '1.4.20'
+}
+
+group 'me.bardy'
+version '1.0'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://libraries.minecraft.net' }
+}
+
+dependencies {
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib'
+
+    api 'com.mojang:brigadier:1.0.17'
+
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from dokkaJavadoc
+    classifier 'javadoc'
+}
+
+publishing {
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+            credentials {
+                username project.hasProperty('mavenUsername') ? mavenUsername : System.getenv('MAVEN_USERNAME')
+                password project.hasProperty('mavenPassword') ? mavenPassword : System.getenv('MAVEN_PASSWORD')
+            }
+        }
+    }
+
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'admiral'
+
+            from components.kotlin
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = 'Admiral'
+                description = 'A simple DSL for Mojang\'s Brigadier'
+                url = 'https://admiral.bardy.me'
+
+                packaging = 'jar'
+
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'bombardygamer'
+                        name = 'Callum Seabrook'
+                        email = 'callum.seabrook@prevarinite.com'
+                        timezone = 'Europe/London'
+                    }
+                }
+
+                scm {
+                    connection = 'scm:git:git://github.com/BomBardyGamer/admiral.git'
+                    developerConnection = 'scm:git:ssh://github.com:BomBardyGamer/admiral.git'
+                    url = 'https://github.com/BomBardyGamer/admiral'
+                }
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
