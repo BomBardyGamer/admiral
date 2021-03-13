@@ -6,46 +6,45 @@ import com.mojang.brigadier.arguments.*
 import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.builder.RequiredArgumentBuilder
-import com.mojang.brigadier.context.CommandContext
 
 @DslMarker
 annotation class CommandDSL
 
 @CommandDSL
-inline fun <S> literalArgument(
+inline fun <S> literal(
     argument: String,
     builder: LiteralArgumentBuilder<S>.() -> Unit = {}
 ): LiteralArgumentBuilder<S> = LiteralArgumentBuilder.literal<S>(argument).apply(builder)
 
 @CommandDSL
-inline fun <S, T> requiredArgument(
+inline fun <S, T> required(
     argument: String,
     type: ArgumentType<T>,
     builder: RequiredArgumentBuilder<S, T>.() -> Unit = {}
 ): RequiredArgumentBuilder<S, T> = RequiredArgumentBuilder.argument<S, T>(argument, type).apply(builder)
 
 @CommandDSL
-fun <S> LiteralArgumentBuilder<S>.literalArgument(
+fun <S> LiteralArgumentBuilder<S>.literal(
     argument: String,
     builder: LiteralArgumentBuilder<S>.() -> Unit = {}
 ): LiteralArgumentBuilder<S> = then(LiteralArgumentBuilder.literal<S>(argument).apply(builder))
 
 @CommandDSL
-fun <S, T> LiteralArgumentBuilder<S>.requiredArgument(
+fun <S, T> LiteralArgumentBuilder<S>.required(
     argument: String,
     type: ArgumentType<T>,
     builder: RequiredArgumentBuilder<S, T>.() -> Unit = {}
 ): LiteralArgumentBuilder<S> = then(RequiredArgumentBuilder.argument<S, T>(argument, type).apply(builder))
 
 @CommandDSL
-fun <S, T> RequiredArgumentBuilder<S, T>.requiredArgument(
+fun <S, T> RequiredArgumentBuilder<S, T>.required(
     argument: String,
     type: ArgumentType<T>,
     builder: RequiredArgumentBuilder<S, T>.() -> Unit = {}
 ): RequiredArgumentBuilder<S, T> = then(RequiredArgumentBuilder.argument<S, T>(argument, type).apply(builder))
 
 @CommandDSL
-fun <S, T> RequiredArgumentBuilder<S, T>.literalArgument(
+fun <S, T> RequiredArgumentBuilder<S, T>.literal(
     argument: String,
     builder: LiteralArgumentBuilder<S>.() -> Unit = {}
 ): RequiredArgumentBuilder<S, T> = then(LiteralArgumentBuilder.literal<S>(argument).apply(builder))

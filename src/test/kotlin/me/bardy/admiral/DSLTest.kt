@@ -12,40 +12,40 @@ class DSLTest {
     @BeforeTest
     fun `register time command`() {
         dispatcher.register(
-            literalArgument("time") {
-                literalArgument("set") {
+            literal("time") {
+                literal("set") {
                     executes { 2 }
-                    literalArgument("day") {
+                    literal("day") {
                         executes { 5 }
                     }
-                    literalArgument("noon") {
+                    literal("noon") {
                         executes { 6 }
                     }
-                    literalArgument("night") {
+                    literal("night") {
                         executes { 7 }
                     }
-                    literalArgument("midnight") {
+                    literal("midnight") {
                         executes { 8 }
                     }
-                    requiredArgument("time", integer) {
+                    required("time", integer) {
                         executes { 9 }
                     }
                 }
-                literalArgument("add") {
+                literal("add") {
                     executes { 3 }
-                    requiredArgument("time", integer) {
+                    required("time", integer) {
                         executes { 10 }
                     }
                 }
-                literalArgument("query") {
+                literal("query") {
                     executes { 4 }
-                    literalArgument("daytime") {
+                    literal("daytime") {
                         executes { 11 }
                     }
-                    literalArgument("gametime") {
+                    literal("gametime") {
                         executes { 12 }
                     }
-                    literalArgument("day") {
+                    literal("day") {
                         executes { 13 }
                     }
                 }
